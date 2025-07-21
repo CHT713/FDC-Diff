@@ -1,5 +1,5 @@
 # FDC-Diff：Fragment-based Dual Conditional Diffusion Framework for Molecular Generation
-
+![模型结构图](figure/model.pdf)
 ## 🧩 Dependencies
 
 This project requires a conda environment for dependency management.  
