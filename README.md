@@ -37,3 +37,18 @@ python split_and_convert.py
 ```bash
 python -W ignore process_and_prepare.py
 ```
+
+## 📦 Training
+```bash
+python train.py --config configs/single_full.yml
+```
+
+## 📦 Sampling
+```bash
+python sample.py -W ignore --checkpoint ckpt/best.ckpt \
+                 --samples sample_mols \
+                 --data data/single \
+                 --prefix crossdocksingle_test_full \
+                 --n_samples 100 \
+                 --device cuda:0
+```
