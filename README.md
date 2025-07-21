@@ -1,6 +1,6 @@
 # FDC-Diff：Fragment-based Dual Conditional Diffusion Framework for Molecular Generation
 <p align="center">
-  <img src="figure/model.pdf" width="60%">
+<img src="figure/model.pdf" alt="architecture"/>
 </p>
 
 ## 🧩 Dependencies
