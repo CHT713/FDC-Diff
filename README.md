@@ -13,7 +13,7 @@ git clone https://github.com/CHT713/FDC-Diff.git
 cd FDC-Diff
 
 # Create the environment from the YAML file
-conda env create -f FC.yml
+conda env create -f FC.yaml
 
 # Activate the environment
 conda activate FC
