@@ -178,42 +178,6 @@ def is_valid_molecule(sdf_path):
     except Exception as e:
         print(f"Error processing {sdf_path}: {e}")
         return False
-from sascorer import calculateScore
-def get_sa_score_from_sdf(sdf_path):
-    mol = Chem.SDMolSupplier(sdf_path, sanitize=True)[0]
-    if mol is None:
-        return None
-    sa_score = calculateScore(mol)
-    sa_norm = round((10 - sa_score) / 9, 2)
-    return sa_norm
-
-
-from rdkit import Chem
-from rdkit.Chem import QED
-
-from rdkit import Chem
-from rdkit.Chem import QED
-
-def calculate_qed_from_single_sdf(sdf_path):
-    """
-    读取一个只包含一个分子的 .sdf 文件，计算其 QED 分数。
-
-    参数:
-        sdf_path (str): 单分子 SDF 文件路径。
-
-    返回:
-        float 或 None: 返回 QED 分数，若失败则返回 None。
-    """
-    suppl = Chem.SDMolSupplier(sdf_path, removeHs=False)
-    mol = suppl[0] if suppl and suppl[0] is not None else None
-
-    if mol is not None:
-        try:
-            return QED.qed(mol)
-        except:
-            return None
-    return None
-
 
 
 def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point):
@@ -307,18 +271,7 @@ def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point
                     )
                     if result2.returncode == 0 and os.path.exists(out_sdf) and os.path.getsize(out_sdf) > 0:
                         if is_valid_molecule(out_sdf):
-                            sa_score = get_sa_score_from_sdf(out_sdf)
-                            qed =calculate_qed_from_single_sdf(out_sdf)
-                            if sa_score is not None and qed is not None and (
-                                    (qed > 0.6 and sa_score > 0.4) or
-                                    (sa_score > 0.6 and qed > 0.4) or
-                                    (qed > 0.7 and sa_score > 0.3) or
-                                    (sa_score > 0.7 and qed > 0.3) or
-                                    (qed > 0.5 and sa_score > 0.5) or
-                                    (sa_score > 0.8 and qed > 0.2) or (sa_score > 0.2 and qed > 0.8)
-                            ):
-
-                                print(f"Generated {out_sdf} successfully, valid and SA score = {sa_score:.2f}")
+                                print(f"Generated {out_sdf} successfully)
                             else:
                                 print(
                                     f"Generated molecule {out_sdf} has low SA score ({sa_score:.2f}), deleting and retrying...")
