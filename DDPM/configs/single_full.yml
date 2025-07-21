@@ -1,0 +1,62 @@
+exp_name: 'diffdec_single'
+data_path: /home/cht/DiffDec-master/data/data4
+train_data_prefix: crossdocksingle_train.full
+val_data_prefix: crossdocksingle_test.full
+checkpoints: models
+logs: logs
+device: gpu
+log_iterations: null
+wandb_entity: null
+enable_progress_bar: True
+lr: 2e-4
+batch_size: 32
+n_layers: 6
+n_epochs: 2000
+test_epochs: 25
+n_stability_samples: 5
+nf: 128
+activation: silu
+attention: False
+condition_time: True
+tanh: False
+norm_constant: 0.000001
+inv_sublayers: 3
+include_charges: False
+loss_type: l2
+data_augmentation: True
+center_of_mass: anchors # [scaffold, anchors]
+# remove_anchors_context: True
+
+in_node_nf: 10
+sin_embedding: False
+normalization_factor: 100
+normalize_factors: [1, 4, 10]
+aggregation_method: 'sum'
+normalization: batch_norm
+
+context_node_nf :  3
+
+model: egnn_dynamics
+network: 'DDPM'
+samples_dir: /home/cht/DiffDec-master/logs
+train:
+  val_freq: 1
+  seed: 2021
+  max_grad_norm: 10.0
+  num_workers: 4
+  anneal_power: 2.0
+  optimizer:
+    type: adam
+    lr: 2e-4
+    weight_decay: 0.
+    beta1: 0.95
+    beta2: 0.999
+  scheduler:
+    type: plateau
+    factor: 0.8
+    patience: 25
+    min_lr: 1.e-6
+dataset:
+  name: crossdock
+
+resume:
