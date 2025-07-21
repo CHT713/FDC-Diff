@@ -17,6 +17,7 @@ conda env create -f FC.yml
 
 # Activate the environment
 conda activate FC
+ ```
 
 📦 Dataset Preparation
 We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct single and multi R-group datasets.
