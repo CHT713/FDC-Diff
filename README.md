@@ -24,7 +24,7 @@ conda activate FC
 ## 📦 Dataset Preparation
 We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct datasets.To prepare the datasets from scratch, follow the steps below:
 
-1.Download the dataset archive crossdocked_pocket10.tar.gz and the split file split_by_name.pt.
+1.Download the dataset archive crossdocked_pocket10.tar.gz and the split file split_by_name.pt.(https://drive.google.com/drive/folders/1CzwxmTpjbrt83z_wBzcQncq84OVDPurM)
 
  You can also find the original CrossDocked dataset at:https://bits.csb.pitt.edu/files/crossdock2020/
  
