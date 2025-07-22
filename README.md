@@ -1,12 +1,11 @@
 # FDC-Diff：Fragment-based Dual Conditional Diffusion Framework for Molecular Generation
 <p align="center">
-<img src="figure/model.pdf" alt="architecture"/>
+<img src="figure/model.png" alt="architecture"/>
 </p>
 
 ## 🧩 Dependencies
 
-This project requires a conda environment for dependency management.  
-Please use the provided environment file to install all required packages.
+This project requires a conda environment for dependency management. Please use the provided environment file to install all required packages.
 
 ### 🔧 Setup via Conda
 
@@ -23,19 +22,23 @@ conda activate FC
  ```
 
 ## 📦 Dataset Preparation
-We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct single and multi R-group datasets.To prepare the datasets from scratch, follow the steps below:
+We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct datasets.To prepare the datasets from scratch, follow the steps below:
 
 1.Download the dataset archive crossdocked_pocket10.tar.gz and the split file split_by_name.pt.
-  You can also find the original CrossDocked dataset at:https://bits.csb.pitt.edu/files/crossdock2020/
+
+ You can also find the original CrossDocked dataset at:https://bits.csb.pitt.edu/files/crossdock2020/
 2.Extract the TAR archive using the command:
 ```bash
 tar -xzvf crossdocked_pocket10.tar.gz
 ```
+
 3.Split raw PL‑complexes and convert SDF to SMILES:
 ```bash
 python split_and_convert.py
 ```
+
 4.Use the reaction-based slicing method in [LibINVENT](https://github.com/MolecularAI/Lib-INVENT-dataset)  to slice the molecules into scaffolds and R-groups in Lib-INVENT-dataset and replace
+
 5.Process datasets
 ```bash
 python -W ignore process_and_prepare.py
