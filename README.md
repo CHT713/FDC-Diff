@@ -36,6 +36,7 @@ tar -xzvf crossdocked_pocket10.tar.gz
 python split_and_convert.py
 ```
 4.Use the reaction-based slicing method in [LibINVENT](https://github.com/MolecularAI/Lib-INVENT-dataset)  to slice the molecules into scaffolds and R-groups in Lib-INVENT-dataset and replace
+
 5.Process datasets
 ```bash
 python -W ignore process_and_prepare.py
