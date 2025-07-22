@@ -23,7 +23,7 @@ conda activate FC
  ```
 
 ## 📦 Dataset Preparation
-We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct single and multi R-group datasets.To prepare the datasets from scratch, follow the steps below:
+We use the CrossDocked dataset and the reaction-based slicing method from LibINVENT to construct datasets.To prepare the datasets from scratch, follow the steps below:
 
 1.Download the dataset archive crossdocked_pocket10.tar.gz and the split file split_by_name.pt.
   You can also find the original CrossDocked dataset at:https://bits.csb.pitt.edu/files/crossdock2020/
