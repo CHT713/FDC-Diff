@@ -27,6 +27,7 @@ We use the CrossDocked dataset and the reaction-based slicing method from LibINV
 1.Download the dataset archive crossdocked_pocket10.tar.gz and the split file split_by_name.pt.
 
  You can also find the original CrossDocked dataset at:https://bits.csb.pitt.edu/files/crossdock2020/
+ 
 2.Extract the TAR archive using the command:
 ```bash
 tar -xzvf crossdocked_pocket10.tar.gz
