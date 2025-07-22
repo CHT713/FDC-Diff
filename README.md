@@ -5,8 +5,7 @@
 
 ## 🧩 Dependencies
 
-This project requires a conda environment for dependency management.  
-Please use the provided environment file to install all required packages.
+This project requires a conda environment for dependency management. Please use the provided environment file to install all required packages.
 
 ### 🔧 Setup via Conda
 
@@ -32,10 +31,12 @@ We use the CrossDocked dataset and the reaction-based slicing method from LibINV
 ```bash
 tar -xzvf crossdocked_pocket10.tar.gz
 ```
+
 3.Split raw PL‑complexes and convert SDF to SMILES:
 ```bash
 python split_and_convert.py
 ```
+
 4.Use the reaction-based slicing method in [LibINVENT](https://github.com/MolecularAI/Lib-INVENT-dataset)  to slice the molecules into scaffolds and R-groups in Lib-INVENT-dataset and replace
 
 5.Process datasets
