@@ -15,7 +15,7 @@ git clone https://github.com/CHT713/FDC-Diff.git
 cd FDC-Diff
 
 # Create the environment from the YAML file
-conda env create -f FC.yaml
+conda env create -f FC.yaml(If you encounter download failures, we recommend that you manually download each package that failed individually.)
 
 # Activate the environment
 conda activate FC
@@ -58,12 +58,7 @@ wget https://zenodo.org/records/15353365/files/geom_cdg.ckpt -O models/geom_cdg.
 ```
 
 ```bash
-python sample.py -W ignore --checkpoint ckpt/best.ckpt \
-                 --samples sample_mols \
-                 --data data/single \
-                 --prefix crossdocksingle_test_full \
-                 --n_samples 100 \
-                 --device cuda:0
+python sample.py
 ```
 ## Other datasets
 If you want to train and test other datasets on our model, first, you need to understand how to use LibINVENT to split ligand data into scaffolds and R-groups. Afterward, modify the process_and_prepare.py script to accommodate the input and output requirements of your dataset. Finally, if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
