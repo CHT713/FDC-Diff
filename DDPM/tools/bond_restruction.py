@@ -328,8 +328,8 @@ def calculate_qed_from_single_sdf(sdf_path):
 
 def yuel_bond(out_xyz,out_sdf):
     yuel_bond_path = 'yuel_bond/yuel_bond.py'  # yuel_bond.py 的路径
-    model_path = '/models/geom_3d.ckpt'  # 模型路径
-    model_path_cdg = '/models/geom_cdg.ckpt'  # 模型路径
+    model_path = 'yuel_bond/models/geom_3d.ckpt'  # 模型路径
+    model_path_cdg = 'yuel_bond/models/geom_cdg.ckpt'  # 模型路径
     result = subprocess.run(
         f'/home/cht/anaconda3/envs/BF/bin/python3 {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path}',
         shell=True, capture_output=True, text=True
