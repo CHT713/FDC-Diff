@@ -51,6 +51,12 @@ python train.py --config configs/single_full.yml
 ```
 
 ## 📦 Sampling
+Switch to the models folder under the yuel_bond directory, and run the following commands to download the bond prediction model weights:
+```bash
+wget https://zenodo.org/records/15353365/files/geom_3d.ckpt -O models/geom_3d.ckpt
+wget https://zenodo.org/records/15353365/files/geom_cdg.ckpt -O models/geom_cdg.ckpt
+```
+
 ```bash
 python sample.py -W ignore --checkpoint ckpt/best.ckpt \
                  --samples sample_mols \
@@ -59,3 +65,5 @@ python sample.py -W ignore --checkpoint ckpt/best.ckpt \
                  --n_samples 100 \
                  --device cuda:0
 ```
+## Other datasets
+If you want to train and test other datasets on our model, first, you need to understand how to use LibINVENT to split ligand data into scaffolds and R-groups. Afterward, modify the process_and_prepare.py script to accommodate the input and output requirements of your dataset. Finally, if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
