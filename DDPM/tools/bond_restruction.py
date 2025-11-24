@@ -327,9 +327,9 @@ def calculate_qed_from_single_sdf(sdf_path):
 
 
 def yuel_bond(out_xyz,out_sdf):
-    yuel_bond_path = '/home/cht/dokhlab-yuel_bond/yuel_bond.py'  # yuel_bond.py 的路径
-    model_path = '/home/cht/dokhlab-yuel_bond/models/geom_3d.ckpt'  # 模型路径
-    model_path_cdg = '/home/cht/dokhlab-yuel_bond/models/geom_cdg.ckpt'  # 模型路径
+    yuel_bond_path = 'yuel_bond/yuel_bond.py'  # yuel_bond.py 的路径
+    model_path = '/models/geom_3d.ckpt'  # 模型路径
+    model_path_cdg = '/models/geom_cdg.ckpt'  # 模型路径
     result = subprocess.run(
         f'/home/cht/anaconda3/envs/BF/bin/python3 {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path}',
         shell=True, capture_output=True, text=True
@@ -338,52 +338,51 @@ def yuel_bond(out_xyz,out_sdf):
     # 检查 yuel_bond.py 转换后的 sdf 是否有效
     if os.path.exists(out_sdf) and is_valid_molecule(out_sdf) > 0:
 
-        print(f'转换成功，使用 yuel_bond.py 生成的 {out_sdf}')
+       
         all_valid = True  #
 
     else:
-        print(f'yuel_bond.py 转换失败，使用 cdg模式 进行转换：{out_xyz} -> {out_sdf}')
+        
         if os.path.exists(out_sdf):
             os.remove(out_sdf)
-            print(f'删除了之前生成的 {out_sdf}')
+          
         result2 = subprocess.run(
             f'/home/cht/anaconda3/envs/BF/bin/python3 {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path_cdg}',
             shell=True, capture_output=True, text=True
         )
 
         if os.path.exists(out_sdf) and is_valid_molecule(out_sdf):
-            print(f'转换成功，使用 yuel_bond.py cdg模式生成的 {out_sdf}')
+         
             all_valid=True
         else:
-            print(f'cdg 转换失败')
+    
             os.remove(out_xyz)
             os.remove(out_sdf)
             all_valid = False
 
     return all_valid
 
-def openbabel_bond(out_xyz,out_sdf):
-    obabel_path = '/home/cht/anaconda3/envs/BF/bin/obabel'  # 换成你的 obabel 路径
+# def openbabel_bond(out_xyz,out_sdf):
+#     obabel_path = 'obabel'  # 换成你的 obabel 路径
 
 
-    # 第二步：将优化后的 xyz 转换为 sdf
-    result = subprocess.run(
-        f'{obabel_path} {out_xyz} -O {out_sdf} --minimize --ff MMFF94',
-        shell=True, capture_output=True, text=True
-    )
-    if os.path.exists(out_sdf) and is_valid_molecule(out_sdf):
-        all_valid=True
-    else:
-        os.remove(out_xyz)
-        os.remove(out_sdf)
-        all_valid = False
+#     # 第二步：将优化后的 xyz 转换为 sdf
+#     result = subprocess.run(
+#         f'{obabel_path} {out_xyz} -O {out_sdf} --minimize --ff MMFF94',
+#         shell=True, capture_output=True, text=True
+#     )
+#     if os.path.exists(out_sdf) and is_valid_molecule(out_sdf):
+#         all_valid=True
+#     else:
+#         os.remove(out_xyz)
+#         os.remove(out_sdf)
+#         all_valid = False
 
-    return  all_valid
+#     return  all_valid
 
 
 def bond_CN(out_xyz,output_dir,pred_names_r,j,success_count,retries):
     out_sdf_yb = f'{output_dir}/{pred_names_r[j]}_y.sdf'
-    out_sdf_ob = f'{output_dir}/{pred_names_r[j]}_o.sdf'
     out_sdf_rd = f'{output_dir}/{pred_names_r[j]}_r.sdf'
 
     all_valid_yb=yuel_bond(out_xyz,out_sdf_yb)
@@ -397,7 +396,7 @@ def bond_CN(out_xyz,output_dir,pred_names_r,j,success_count,retries):
     else:
         yb_score = 0
 
-    print("开始比较")
+    
     mol = read_xyz_and_build(out_xyz)
     Chem.SanitizeMol(mol)
     # 保存为 SDF 供查看
@@ -413,33 +412,22 @@ def bond_CN(out_xyz,output_dir,pred_names_r,j,success_count,retries):
         all_valid_rd=False
         rd_score = 0
 
-    all_valid_ob=openbabel_bond(out_xyz,out_sdf_ob)
-    if all_valid_ob:
-        sa_ob = get_sa_score_from_sdf(out_sdf_ob)
-        qed_ob = calculate_qed_from_single_sdf(out_sdf_ob)
-        ob_score = sa_ob + qed_ob
-    else:
-        ob_score = 0
 
-    print(yb_score,ob_score,rd_score)
-    best_score = max(yb_score, ob_score, rd_score)
+    print(yb_score,rd_score)
+    best_score = max(yb_score, rd_score)
     if best_score == yb_score:
         best_sdf = out_sdf_yb
-    elif best_score == ob_score:
-        best_sdf = out_sdf_ob
     else:
         best_sdf = out_sdf_rd
 
     # 删除其他方法生成的文件
     if best_sdf != out_sdf_yb:
         os.remove(out_sdf_yb)
-    if best_sdf != out_sdf_ob:
-        os.remove(out_sdf_ob)
     if best_sdf != out_sdf_rd:
         os.remove(out_sdf_rd)
 
     out_sdf = best_sdf
-    all_valid = all_valid_ob or all_valid_yb or all_valid_rd
+    all_valid = all_valid_yb or all_valid_rd
     if all_valid:
         success_count += 1
 
