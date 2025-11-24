@@ -92,30 +92,31 @@ p.add_argument('--remove_anchors_context', action='store_true', default=False, h
 p.add_argument('--cuda', type=bool, default=True)
 p.add_argument('--logdir', type=str, default='./logs')
 
-# 直接定义 args
 
 def generate_animation(self, chain, node_mask, id):
-        # 根据 id 设置保存路径
-        if id == 'scaffold':
-            animation_dir = os.path.join(self.samples_dir, 'scaffold_animation')
-        else:
-            animation_dir = os.path.join(self.samples_dir, 'rgroup_animation')
-        os.makedirs(animation_dir, exist_ok=True)
+    # 根据 id 设置保存路径
+    if id == 'scaffold':
+        animation_dir = os.path.join(self.samples_dir, 'scaffold_animation')
+    else:
+        animation_dir = os.path.join(self.samples_dir, 'rgroup_animation')
+    os.makedirs(animation_dir, exist_ok=True)
 
-        # 检查 chain 的格式
-        if isinstance(chain, list):
-            # 如果 chain 是列表，每个元素是一个帧
-            for frame_idx, frame in enumerate(chain):
-                x = frame[:, :, :self.edm.n_dims]  # 提取位置
-                h = frame[:, :, self.edm.n_dims:]  # 提取特征
-                name = f'{id}_frame_{frame_idx}'
-                vis.save_xyz_file_fa(animation_dir, h, x, node_mask, names=[name])
-        else:
-            # 如果 chain 是单个张量，视为只有一帧
-            x = chain[:, :, :self.edm.n_dims]
-            h = chain[:, :, self.edm.n_dims:]
-            name = f'{id}_frame_0'
+    # 检查 chain 的格式
+    if isinstance(chain, list):
+        # 如果 chain 是列表，每个元素是一个帧
+        for frame_idx, frame in enumerate(chain):
+            x = frame[:, :, :self.edm.n_dims]  # 提取位置
+            h = frame[:, :, self.edm.n_dims:]  # 提取特征
+            name = f'{id}_frame_{frame_idx}'
             vis.save_xyz_file_fa(animation_dir, h, x, node_mask, names=[name])
+    else:
+        # 如果 chain 是单个张量，视为只有一帧
+        x = chain[:, :, :self.edm.n_dims]
+        h = chain[:, :, self.edm.n_dims:]
+        name = f'{id}_frame_0'
+        vis.save_xyz_file_fa(animation_dir, h, x, node_mask, names=[name])
+
+
 # 检查已生成样本
 def check_if_generated(output_dir, uuids, n_samples):
     generated = True
@@ -180,14 +181,55 @@ def is_valid_molecule(sdf_path):
         return False
 
 
-def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point):
+from sascorer import calculateScore
 
+
+def get_sa_score_from_sdf(sdf_path):
+    mol = Chem.SDMolSupplier(sdf_path, sanitize=True)[0]
+    if mol is None:
+        return None
+    sa_score = calculateScore(mol)
+    sa_norm = round((10 - sa_score) / 9, 2)
+    return sa_norm
+
+
+from rdkit import Chem
+from rdkit.Chem import QED
+
+from rdkit import Chem
+from rdkit.Chem import QED
+
+
+def calculate_qed_from_single_sdf(sdf_path):
+    """
+    读取一个只包含一个分子的 .sdf 文件，计算其 QED 分数。
+
+    参数:
+        sdf_path (str): 单分子 SDF 文件路径。
+
+    返回:
+        float 或 None: 返回 QED 分数，若失败则返回 None。
+    """
+    suppl = Chem.SDMolSupplier(sdf_path, removeHs=False)
+    mol = suppl[0] if suppl and suppl[0] is not None else None
+
+    if mol is not None:
+        try:
+            return QED.qed(mol)
+        except:
+            return None
+    return None
+
+
+def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point):
+    success_count = 0
     for i in tqdm(range(starting_point, n_samples), desc="Sampling molecules"):
         retries = 0
-        while retries < 1000:
+
+        while retries < 5:
             try:
                 # 生成骨架
-                chain_scaffold, node_mask_scaffold, num_atoms_scaffold,sample_atom_mask,sample_pocket_mask,sample_rgroup_mask,data_sample = model.sample_chain(
+                chain_scaffold, node_mask_scaffold, num_atoms_scaffold, sample_atom_mask, sample_pocket_mask, sample_rgroup_mask, data_sample = model.sample_chain(
                     data=data, sample_fn=None, keep_frames=1, id=0
                 )
 
@@ -195,10 +237,10 @@ def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point
                 h_scaffold = chain_scaffold[-1][:, :, model.n_dims:]
                 #
 
-                center_of_mass_list=[]
+                center_of_mass_list = []
                 fragment_mask = data['fragment_mask']
-                com_mask =fragment_mask
-                x =data['positions']
+                com_mask = fragment_mask
+                x = data['positions']
                 x_masked = x * com_mask
                 N = com_mask.sum(1, keepdims=True)
                 mean = torch.sum(x_masked, dim=1, keepdim=True) / N
@@ -221,7 +263,6 @@ def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point
                 # pred_names_scaffold = [f'{uuid}/{i}_scaffold' for uuid in uuids]
                 # vis.save_xyz_file_fa(output_dir, h_scaffold, x_scaffold, node_mask_s, pred_names_scaffold)
 
-
                 # 准备 R 基团生成的数据
                 generated_scaffold = {
                     'positions': x_scaffold,
@@ -229,79 +270,42 @@ def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point
                     # 如果需要其他字段（如掩码），在这里添加
                 }
 
-
                 chain_rgroup, node_mask_rgroup, num_atoms_rgroup = model.sample_chain(
                     data=data_sample, sample_fn=None, keep_frames=1, id=1, generated_scaffold=generated_scaffold
                 )
 
-
-                x_rgroup =chain_rgroup[-1][:, :, :model.n_dims]
-                h_rgroup =chain_rgroup[-1][:, :, model.n_dims:]
+                x_rgroup = chain_rgroup[-1][:, :, :model.n_dims]
+                h_rgroup = chain_rgroup[-1][:, :, model.n_dims:]
 
                 x_rgroup += mean
 
-
-                node_mask_r =  sample_atom_mask -sample_pocket_mask
-
+                node_mask_r = sample_atom_mask - sample_pocket_mask
 
                 # 保存完整分子
                 pred_names_r = [f'{uuid}/{i}_full' for uuid in uuids]
-                vis.save_xyz_file_fa(output_dir, h_rgroup, x_rgroup,node_mask_r, pred_names_r)
-
-
+                vis.save_xyz_file_fa(output_dir, h_rgroup, x_rgroup, node_mask_r, pred_names_r)
 
                 all_valid = True
                 # 转换为 SDF 文件
+
                 for j in range(len(pred_names_r)):
                     out_xyz = f'{output_dir}/{pred_names_r[j]}_.xyz'
-                    opt_xyz = f'{output_dir}/{pred_names_r[j]}_opt.xyz'
-                    out_sdf = f'{output_dir}/{pred_names_r[j]}_.sdf'
-                    obabel_path = '/home/cht/anaconda3/envs/BF/bin/obabel'  # 换成你的 obabel 路径
 
-                    # 第一步：优化 xyz 文件，输出优化后的 xyz
-                    result1 = subprocess.run(
-                        f'{obabel_path} {out_xyz} -O {opt_xyz} --minimize --ff UFF',
-                        shell=True, capture_output=True, text=True
-                    )
+                    out_sdf,success_count,all_valid=bond_CN(out_xyz,output_dir,pred_names_r,j,success_count,retries)
+                    if all_valid:
+                        sa_score = get_sa_score_from_sdf(out_sdf)
+                        qed = calculate_qed_from_single_sdf(out_sdf)
+                        print(f"Generated {out_sdf} successfully, valid and SA score = {sa_score:.2f},and qed score = {qed:.2f} ")
 
-                    # 第二步：将优化后的 xyz 转换为 sdf
-                    result2 = subprocess.run(
-                        f'{obabel_path} {opt_xyz} -O {out_sdf}',
-                        shell=True, capture_output=True, text=True
-                    )
-                    if result2.returncode == 0 and os.path.exists(out_sdf) and os.path.getsize(out_sdf) > 0:
-                        if is_valid_molecule(out_sdf):
-                                print(f"Generated {out_sdf} successfully)
-                            else:
-                                print(
-                                    f"Generated molecule {out_sdf} has low SA score ({sa_score:.2f}), deleting and retrying...")
-                                os.remove(out_xyz)
-                                os.remove(opt_xyz)
-                                os.remove(out_sdf)
-                                all_valid = False
-                        else:
-                            print(f"Molecule {out_sdf} is invalid, deleting and retrying...")
-                            os.remove(out_xyz)
-                            os.remove(opt_xyz)
-                            os.remove(out_sdf)
-
-                            all_valid = False
-                    else:
-                        print(f"Warning: Failed to convert {out_xyz} to SDF")
-                        if os.path.exists(out_xyz):
-                            os.remove(out_xyz)
-                        if os.path.exists(opt_xyz):  # <-- 加这一行
-                            os.remove(opt_xyz)
-                        all_valid = False
+                print(f"Total successfully converted molecules using yuel_bond.py: {success_count}")
                 if all_valid:
                     break  # 所有分子都合理，跳出重试循环
                 else:
                     retries += 1
-                    if retries >=1000:
+                    if retries >=5:
                         print(
-                            f"Failed to generate valid molecule after {1000} retries for sample {i}, uuids {uuids}")
+                            f"Failed to generate valid molecule after {5} retries for sample {i}, uuids {uuids}")
                         break
-
             except Exception as e:
                 print(f"Error in sampling molecule {i} for uuids {uuids}: {e}")
                 continue
@@ -309,8 +313,8 @@ def two_stage_sampling(model, data, output_dir, uuids, n_samples, starting_point
 
 def main():
     args1 = argparse.Namespace(
-        checkpoint='/home/cht/DiffDec-master/DDPM/logs/crossdock_exp_2025_05_28__16_31_19/checkpoints/fold_1_best_scaffold_1122.pt',
-        samples='./output_samples_cheat',
+        checkpoint='best.pt',  # MODEL
+        samples='./output_samples',
         device='cuda',
         n_samples=100
     )
