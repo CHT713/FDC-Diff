@@ -1,0 +1,10 @@
+/analyses/** 
+!/analyses/**/*.py
+data
+datasets
+logs
+models
+__pycache__
+/tests/**
+!/tests/**/*.py
+data_to_upload
