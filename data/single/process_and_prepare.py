@@ -631,10 +631,10 @@ def main(scaf_dataset, mode):
 
 if __name__ == '__main__':
     # 处理输入文件
-    train_sliced_file = '/home/cht/DiffDec-master/data/data2/train_smi_out.smi'
-    test_sliced_file = '/home/cht/DiffDec-master/data/data2/test_smi_out.smi'
-    processed_train_file = '/home/cht/DiffDec-master/data/data2/train_smi_out_processed.smi'
-    processed_test_file = '/home/cht/DiffDec-master/data/data2/test_smi_out_processed.smi'
+    train_sliced_file = '../train_smi_out.smi'  # libinvent处理后的文件路径
+    test_sliced_file = '../test_smi_out.smi'
+    processed_train_file = '../train_smi_out_processed.smi'  # 最终数据集处理的结果路径
+    processed_test_file = '../test_smi_out_processed.smi'
 
     print("Processing train_smi_out.smi...")
     process_input_file(train_sliced_file, processed_train_file)
