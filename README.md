@@ -46,6 +46,7 @@ python -W ignore process_and_prepare.py
 ```
 
 ## 📦 Training
+Change data_path: /data/data in configs/single_full.yml to your data processing path.
 ```bash
 python train.py --config configs/single_full.yml
 ```
