@@ -1,9 +1,7 @@
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"  # 确保只使用GPU 1
 import torch
-if torch.cuda.is_available():
-    torch.cuda.set_device(0)  # 因为设置了CUDA_VISIBLE_DEVICES="1"，这里的0实际上就是物理GPU 1
+
 
 import logging
 import random
