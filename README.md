@@ -40,7 +40,7 @@ python split_and_convert.py
 
 4.Use the reaction-based slicing method in [LibINVENT](https://github.com/MolecularAI/Lib-INVENT-dataset)  to slice the molecules into scaffolds and R-groups in Lib-INVENT-dataset and replace and replace example_configurations/supporting_files/filter_conditions.json in Lib-INVENT-dataset with filter_conditions.json in this directory of data.
 
-5.Process datasets
+5.Process datasets：Switch to the data/single directory，Save the results obtained from libinvent, then modify the train_sliced_file, test_sliced_file (the save path for libinvent results), processed_train_file, and processed_test_file (the save path for the final processed data structure) in the data/single/process_and_prepare file.
 ```bash
 python -W ignore process_and_prepare.py
 ```
