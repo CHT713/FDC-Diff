@@ -1,5 +1,5 @@
 exp_name: 'diffdec_single'
-data_path: /home/cht/DiffDec-master/data/data4
+data_path: /data/data   # 修改为您的数据数据处理路径
 train_data_prefix: crossdocksingle_train.full
 val_data_prefix: crossdocksingle_test.full
 checkpoints: models
