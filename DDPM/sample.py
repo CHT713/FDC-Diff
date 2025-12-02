@@ -328,7 +328,7 @@ def main():
     args.cuda = args.cuda and torch.cuda.is_available()
 
     args.dataset = 'crossdock'
-    config_path = '/home/cht/DiffDec-master/DDPM/configs/single_full.yml'
+    config_path = 'configs/single_full.yml'
     with open(config_path, 'r') as f:
         config = EasyDict(yaml.safe_load(f))
     config.diffusion_steps = args.diffusion_steps
@@ -383,7 +383,7 @@ def main():
 
     # 后续代码保持不变
     val_dataset = CrossDockDataset(
-        data_path='/home/cht/DiffDec-master/data/data2',  # 替换为实际数据路径
+        data_path='',  # 替换为实际数据路径
         prefix='crossdocksingle_test.full',                    # 数据集前缀，根据你的需求调整
         device=args1.device
     )
