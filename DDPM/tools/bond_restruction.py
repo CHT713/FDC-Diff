@@ -331,7 +331,7 @@ def yuel_bond(out_xyz,out_sdf):
     model_path = 'yuel_bond/models/geom_3d.ckpt'  # 模型路径
     model_path_cdg = 'yuel_bond/models/geom_cdg.ckpt'  # 模型路径
     result = subprocess.run(
-        f'/home/cht/anaconda3/envs/BF/bin/python3 {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path}',
+        f'python {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path}',  # 替换为你的python环境路径
         shell=True, capture_output=True, text=True
     )
 
@@ -347,7 +347,7 @@ def yuel_bond(out_xyz,out_sdf):
             os.remove(out_sdf)
           
         result2 = subprocess.run(
-            f'/home/cht/anaconda3/envs/BF/bin/python3 {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path_cdg}',
+            f'python {yuel_bond_path} {out_xyz} {out_sdf} --model {model_path_cdg}',   # 替换为你的python环境路径
             shell=True, capture_output=True, text=True
         )
 
@@ -420,7 +420,7 @@ def bond_CN(out_xyz,output_dir,pred_names_r,j,success_count,retries):
     else:
         best_sdf = out_sdf_rd
 
-    # 删除其他方法生成的文件
+   
     if best_sdf != out_sdf_yb:
         os.remove(out_sdf_yb)
     if best_sdf != out_sdf_rd:
