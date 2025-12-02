@@ -56,9 +56,12 @@ Switch to the models folder under the yuel_bond directory, and run the following
 wget https://zenodo.org/records/15353365/files/geom_3d.ckpt -O models/geom_3d.ckpt
 wget https://zenodo.org/records/15353365/files/geom_cdg.ckpt -O models/geom_cdg.ckpt
 ```
+And then, You need to modify the path in the def yuel_bond function in tools/bond_restruction.py, replacing it with your file path. It is recommended to use absolute paths to avoid unnecessary errors.
 
 ```bash
 python sample.py
 ```
+
+
 ## Other datasets
 If you want to train and test other datasets on our model, first, you need to understand how to use LibINVENT to split ligand data into scaffolds and R-groups. Afterward, modify the process_and_prepare.py script to accommodate the input and output requirements of your dataset. Finally, if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
