@@ -58,6 +58,7 @@ wget https://zenodo.org/records/15353365/files/geom_cdg.ckpt -O models/geom_cdg.
 ```
 And then, You need to modify the path in the def yuel_bond function in tools/bond_restruction.py, replacing it with your file path. It is recommended to use absolute paths to avoid unnecessary errors.
 
+Futhermore, modify the places involving paths in sample.py and update them to your path address.
 ```bash
 python sample.py
 ```
