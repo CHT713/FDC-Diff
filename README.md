@@ -92,4 +92,4 @@ Nc1cc(S(O)(O)O)c(N)c2c1C(=O)c1ccccc1C2=O
 (You can refer to our code for handling.)
 Then modify the preprocess function of datasets.py to replace the paths with the paths of the data you generated above.
 
-5. if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
+5. if you still encounter issues, please check whether the absolute path of data is used.
