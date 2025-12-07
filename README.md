@@ -66,4 +66,14 @@ python sample.py
 
 
 ## Other datasets
-If you want to train and test other datasets on our model, first, you need to understand how to use LibINVENT to split ligand data into scaffolds and R-groups. Afterward, modify the process_and_prepare.py script to accommodate the input and output requirements of your dataset. Finally, if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
+If you want to train and test other datasets on our model：
+1. Convert all ligands to SMILES format and write them into a file with the .smi file extension.  For example:
+```
+CN(CCC(N)CC(=O)NC1CCC(N2C=CC(N)(O)NC2=O)OC1C(=O)O)C(=N)N
+COc1cc(OC)c(S(=O)(=O)NCc2ccccc2N2CCCCC2)cc1NC(C)=O
+Nc1ncnc2c1ncn2C1OC(COP(=O)(O)OP(N)(=O)O)C(O)C1O
+Nc1cc(S(O)(O)O)c(N)c2c1C(=O)c1ccccc1C2=O
+```
+2.you need to understand how to use LibINVENT to split ligand data into scaffolds and R-groups.
+3. modify the process_and_prepare.py script to accommodate the input and output requirements of your dataset. 
+4. if you still encounter issues, you may need to modify the dataset.py file in the DDPM directory to ensure compatibility with the input of your dataset.
