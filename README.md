@@ -75,7 +75,7 @@ Nc1ncnc2c1ncn2C1OC(COP(=O)(O)OP(N)(=O)O)C(O)C1O
 Nc1cc(S(O)(O)O)c(N)c2c1C(=O)c1ccccc1C2=O
 ```
 2. Use LibINVENT to split ligand data into scaffolds and R-groups. (remeber to modify the reaction_based_slicing.json file in the LIBINVENT code. Modify its input and output paths).
-3. Save the results obtained from libinvent, then modify the train_sliced_file, test_sliced_file (the save path for libinvent results), processed_train_file, and processed_test_file (the save path for the final processed data structure) in the data/single/process_and_prepare file.To adapt to your input structure, you need to modify the output of process_and_prepare.py to include the following structure：
+3. Save the results obtained from libinvent, then modify the train_sliced_file, test_sliced_file (the save path for libinvent results), processed_train_file, and processed_test_file (the save path for the final processed data structure) in the data/single/process_and_prepare file. To adapt to your input of model, you need to modify the output of process_and_prepare.py to include the following structure：
    
 1）The structure of the CSV file is as follows:
 
