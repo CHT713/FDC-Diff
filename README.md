@@ -81,7 +81,7 @@ Nc1cc(S(O)(O)O)c(N)c2c1C(=O)c1ccccc1C2=O
 
 | uuid | molecule_name | molecule | scaffold | rgroups | anchor | pocket_full_size | pocket_bb_size | molecule_size | scaffold_size | rgroup_size | protein_filename | fragment |
 |------|---------------|----------|----------|---------|--------|------------------|-----------------|---------------|---------------|-------------|------------------|----------|
-| 0    | __4aaw_A_rec_4ac3_r83_lig_min.pdb | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2N2CCCCC2)cc1NC(C)=O | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2)cc1NC(C)=O | C1CCNCC1 | 0 | 215 | 112 | 31 | 25 | 6 | /home/cht/DiffDec-master/data/crossdocked_pocket10/GLMU_STRPN_2_459_0/4aaw_A_rec_4ac3_r83_lig_tt_min_0_pocket10.pdb | c1ccccc1 |
+| 0    | __4aaw_A_rec_4ac3_r83_lig_min.pdb | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2N2CCCCC2)cc1NC(C)=O | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2)cc1NC(C)=O | C1CCNCC1 | 0 | 215 | 112 | 31 | 25 | 6 | /data/crossdocked_pocket10/GLMU_STRPN_2_459_0/4aaw_A_rec_4ac3_r83_lig_tt_min_0_pocket10.pdb | c1ccccc1 |
 
 2）scaf.sdf
 3) fragment.sdf
