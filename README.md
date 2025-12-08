@@ -77,19 +77,19 @@ Nc1cc(S(O)(O)O)c(N)c2c1C(=O)c1ccccc1C2=O
 2. Use LibINVENT to split ligand data into scaffolds and R-groups. (remeber to modify the reaction_based_slicing.json file in the LIBINVENT code. Modify its input and output paths).
 3. Save the results obtained from libinvent, then modify the train_sliced_file, test_sliced_file (the save path for libinvent results), processed_train_file, and processed_test_file (the save path for the final processed data structure) in the data/single/process_and_prepare file. To adapt to your input of model, you need to modify the output of process_and_prepare.py to include the following structure：
    
-1）The structure of the CSV file is as follows:
+### 1）The structure of the CSV file is as follows:
 
 | uuid | molecule_name | molecule | scaffold | rgroups | anchor | pocket_full_size | pocket_bb_size | molecule_size | scaffold_size | rgroup_size | protein_filename | fragment |
 |------|---------------|----------|----------|---------|--------|------------------|-----------------|---------------|---------------|-------------|------------------|----------|
 | 0    | __4aaw_A_rec_4ac3_r83_lig_min.pdb | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2N2CCCCC2)cc1NC(C)=O | COc1cc(OC)c(S(=O)(=O)NCc2ccccc2)cc1NC(C)=O | C1CCNCC1 | 0 | 215 | 112 | 31 | 25 | 6 | /data/crossdocked_pocket10/GLMU_STRPN_2_459_0/4aaw_A_rec_4ac3_r83_lig_tt_min_0_pocket10.pdb | c1ccccc1 |
 
-2）scaf.sdf
-3) fragment.sdf
-4) pockets.pkl
-5) rgroup.sdf
-6) mol.sdf
+### 2）scaf.sdf
+### 3) fragment.sdf
+### 4) pockets.pkl
+### 5) rgroup.sdf
+### 6) mol.sdf
 
 (You can refer to our code for handling.)
 Then modify the preprocess function of datasets.py to replace the paths with the paths of the data you generated above.
 
-5. if you still encounter issues, please check whether the absolute path of data is used.
+4. if you still encounter issues, please check whether the absolute path of data is used.
